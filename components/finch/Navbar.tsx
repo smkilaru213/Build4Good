@@ -18,10 +18,10 @@ export function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean)
         </a>
         <div className="nav-links">
           {[
-            ['/#problem', 'Problem'],
+            ['/#problem', 'Why Finch'],
+            ['/about', 'About'],
             ['/how-it-works', 'How It Works'],
             ['/#pricing', 'Pricing'],
-            ['/#team', 'Team'],
             ['/#faq', 'FAQ'],
           ].map(([href, label]) => (
             <a key={label} href={href} className="nav-link">{label}</a>

@@ -306,7 +306,6 @@ function Hero() {
 
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}>
             <a href="/#waitlist" className="btn-main">Join the Waitlist →</a>
-            <a href="/how-it-works" className="btn-ghost">See how it works ↓</a>
           </motion.div>
 
           
@@ -374,7 +373,7 @@ function Problem() {
               But more applications without strategy just means more ghosting. Students spend hours on applications that go nowhere.
             </p>
             <a href="/how-it-works" className="btn-main reveal reveal-d2" style={{ display: 'inline-block' }}>
-              See the fix →
+              See how it works →
             </a>
           </div>
 
