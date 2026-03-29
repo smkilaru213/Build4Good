@@ -175,28 +175,28 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           </div>
         </a>
         <div className="nav-links">
-          {[['#problem', 'Problem'], ['#how-it-works', 'How It Works'], ['#pricing', 'Pricing'], ['#team', 'Team'], ['#faq', 'FAQ']].map(([href, label]) => (
-            <a key={label} href={href} className="nav-link"
-              onMouseEnter={e => {
-                const el = e.currentTarget
-                el.style.color = 'white'
-                el.style.transform = 'translateY(-2px) scale(1.05)'
-                const underline = el.querySelector('.nav-underline') as HTMLElement
-                if (underline) underline.style.width = '100%'
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget
-                el.style.color = 'rgba(255,255,255,0.6)'
-                el.style.transform = 'none'
-                const underline = el.querySelector('.nav-underline') as HTMLElement
-                if (underline) underline.style.width = '0%'
-              }}
-              style={{ position: 'relative', display: 'inline-block', paddingBottom: 4, transition: 'color 0.2s, transform 0.2s' }}
-            >
-              {label}
-              <span className="nav-underline" style={{ position: 'absolute', bottom: 0, left: 0, width: '0%', height: 2, background: '#E09643', transition: 'width 0.25s ease' }} />
-            </a>
-          ))}
+        {[['/', 'Home'], ['/how-it-works', 'How It Works'], ['/about', 'About']].map(([href, label]) => (
+  <a key={label} href={href} className="nav-link"
+    onMouseEnter={e => {
+      const el = e.currentTarget
+      el.style.color = 'white'
+      el.style.transform = 'translateY(-2px) scale(1.05)'
+      const underline = el.querySelector('.nav-underline') as HTMLElement
+      if (underline) underline.style.width = '100%'
+    }}
+    onMouseLeave={e => {
+      const el = e.currentTarget
+      el.style.color = 'rgba(255,255,255,0.6)'
+      el.style.transform = 'none'
+      const underline = el.querySelector('.nav-underline') as HTMLElement
+      if (underline) underline.style.width = '0%'
+    }}
+    style={{ position: 'relative', display: 'inline-block', paddingBottom: 4, transition: 'color 0.2s, transform 0.2s' }}
+  >
+    {label}
+    <span className="nav-underline" style={{ position: 'absolute', bottom: 0, left: 0, width: '0%', height: 2, background: '#E09643', transition: 'width 0.25s ease' }} />
+  </a>
+))}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button className="dark-toggle" onClick={() => setDark(!dark)}>{dark ? '☀️' : '🌙'}</button>
@@ -243,7 +243,7 @@ function Hero({ dark }: { dark: boolean }) {
           </motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}>
             <a href="#waitlist" className="btn-main">Join the Waitlist</a>
-            <a href="#how-it-works" className="btn-ghost" style={{ opacity: dark ? 0.85 : 0.6 }}>See how it works</a>
+            <a href="/how-it-works" className="btn-ghost" style={{ opacity: dark ? 0.85 : 0.6 }}>See how it works</a>
           </motion.div>
         </div>
         <motion.div className="hero-visual" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4 }} style={{ position: 'relative', zIndex: 10 }}>
@@ -307,7 +307,7 @@ function Problem({ dark }: { dark: boolean }) {
             <p className="section-label">The Problem</p>
             <h2 className="inbox-h2 reveal">THE ADVICE IS ALWAYS APPLY MORE</h2>
             <p className="inbox-sub reveal reveal-d1" style={{ opacity: m }}>But more applications without strategy just means more ghosting. Students spend hours on applications that go nowhere.</p>
-            <a href="#how-it-works" className="btn-main reveal reveal-d2" style={{ display: 'inline-block' }}>See the fix</a>
+            <a href="/how-it-works" className="btn-main reveal reveal-d2" style={{ display: 'inline-block' }}>See the fix</a>
           </div>
           <div>
             <div style={{ display: 'inline-flex', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 16 }}>
@@ -718,8 +718,7 @@ function Footer({ dark }: { dark: boolean }) {
             </div>
           </div>
           <div className="foot-links">
-            {[['#problem', 'Problem'], ['#how-it-works', 'How It Works'], ['#pricing', 'Pricing'], ['#team', 'Team'], ['#faq', 'FAQ'], ['#waitlist', 'Join Waitlist']].map(([href, label]) => (
-              <a key={label} href={href} className="foot-link">{label}</a>
+          {[['/', 'Home'], ['/how-it-works', 'How It Works'], ['/about', 'About']].map(([href, label]) => (              <a key={label} href={href} className="foot-link">{label}</a>
             ))}
           </div>
         </div>
@@ -746,10 +745,7 @@ export default function Home() {
         <Marquee />
         <Problem dark={dark} />
         <BigStat />
-        <HowItWorks dark={dark} />
-        <Product dark={dark} />
         <Pricing dark={dark} />
-        <AboutTeam />
         <FAQ dark={dark} />
         <Capture />
       </main>

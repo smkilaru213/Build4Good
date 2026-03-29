@@ -10,7 +10,7 @@ type IconEntry = {
   natH: number
 }
 
-const list = icons as IconEntry[]
+const list = (icons as IconEntry[] | IconEntry[][]).flat() as IconEntry[]
 
 const SIZE_SCALE = 1.38
 const MAX_VW = 22
