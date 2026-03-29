@@ -35,11 +35,10 @@ A multi-page marketing website for Finch with:
 npm install
 npm run dev
 ```
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Live Vercel Link
 https://finch-website.vercel.app/
-
-Open [http://localhost:3000](http://localhost:3000).
 
 ## Design Decisions
 
