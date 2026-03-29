@@ -36,7 +36,7 @@ npm install
 npm run dev
 ```
 
-##Live Vercel Link
+## Live Vercel Link
 https://finch-website.vercel.app/
 
 Open [http://localhost:3000](http://localhost:3000).
