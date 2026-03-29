@@ -166,45 +166,58 @@ function BirdFlock() {
 }
 
 function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
-  const [scrolled, setScrolled] = useState(false)
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 32)
-    window.addEventListener('scroll', h)
-    return () => window.removeEventListener('scroll', h)
-  }, [])
   return (
-    <nav className={scrolled ? 'scrolled' : ''}>
+    <nav>
       <div className="nav-inner">
         <a href="#" className="nav-logo">
-        <div style={{ overflow: 'hidden', width: 100, height: 40 }}>
-          <img
-          src="/Logo_Icon-Light__1_-removebg-preview - Edited.png"
-          alt="Finch"
-          style={{ height: 40, width: 'auto', display: 'block' }}
-          />
-        </div>
+          <div style={{ overflow: 'hidden', width: 100, height: 40 }}>
+            <img src="/Logo_Icon-Light__1_-removebg-preview - Edited.png" alt="Finch" style={{ height: 40, width: 'auto', display: 'block' }} />
+          </div>
         </a>
         <div className="nav-links">
           {[['#problem', 'Problem'], ['#how-it-works', 'How It Works'], ['#pricing', 'Pricing'], ['#team', 'Team'], ['#faq', 'FAQ']].map(([href, label]) => (
-            <a key={label} href={href} className="nav-link">{label}</a>
+            <a key={label} href={href} className="nav-link"
+              onMouseEnter={e => {
+                const el = e.currentTarget
+                el.style.color = 'white'
+                el.style.transform = 'translateY(-2px) scale(1.05)'
+                const underline = el.querySelector('.nav-underline') as HTMLElement
+                if (underline) underline.style.width = '100%'
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget
+                el.style.color = 'rgba(255,255,255,0.6)'
+                el.style.transform = 'none'
+                const underline = el.querySelector('.nav-underline') as HTMLElement
+                if (underline) underline.style.width = '0%'
+              }}
+              style={{ position: 'relative', display: 'inline-block', paddingBottom: 4, transition: 'color 0.2s, transform 0.2s' }}
+            >
+              {label}
+              <span className="nav-underline" style={{ position: 'absolute', bottom: 0, left: 0, width: '0%', height: 2, background: '#E09643', transition: 'width 0.25s ease' }} />
+            </a>
           ))}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button className="dark-toggle" onClick={() => setDark(!dark)}>{dark ? '☀️' : '🌙'}</button>
-          <a href="#waitlist" className="nav-cta">Join Waitlist</a>
+          <a href="#waitlist" className="nav-cta"
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#cc7a10'; (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange)'; (e.currentTarget as HTMLAnchorElement).style.transform = 'none' }}
+          >Join Waitlist</a>
         </div>
       </div>
     </nav>
   )
 }
 
-function Hero() {
+function Hero({ dark }: { dark: boolean }) {
   const words = ['INTERVIEWS', 'CALLBACKS', 'RESULTS', 'OFFERS']
   const [wi, setWi] = useState(0)
   useEffect(() => {
     const t = setInterval(() => setWi(i => (i + 1) % words.length), 2400)
     return () => clearInterval(t)
   }, [])
+  const m = dark ? 0.85 : 0.75
   return (
     <section style={{ padding: '0 clamp(24px,5vw,80px)', position: 'relative', overflow: 'hidden' }}>
       <BirdFlock />
@@ -225,12 +238,12 @@ function Hero() {
               </AnimatePresence>
             </div>
           </motion.div>
-          <motion.p className="hero-sub" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
+          <motion.p className="hero-sub" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} style={{ opacity: m }}>
             Stop mass applying with zero return. Finch targets the right roles, tailors your materials automatically, and gets you past ATS in under 60 seconds per application.
           </motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}>
             <a href="#waitlist" className="btn-main">Join the Waitlist</a>
-            <a href="#how-it-works" className="btn-ghost">See how it works</a>
+            <a href="#how-it-works" className="btn-ghost" style={{ opacity: dark ? 0.85 : 0.6 }}>See how it works</a>
           </motion.div>
         </div>
         <motion.div className="hero-visual" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4 }} style={{ position: 'relative', zIndex: 10 }}>
@@ -262,7 +275,7 @@ function Marquee() {
   )
 }
 
-function Problem() {
+function Problem({ dark }: { dark: boolean }) {
   const [withFinch, setWithFinch] = useState(false)
   useEffect(() => {
     const t = setInterval(() => setWithFinch(v => !v), 3000)
@@ -285,6 +298,7 @@ function Problem() {
     { ico: '🟡', co: 'Figma', pos: 'Design Eng Intern', tag: 'Interview', winner: true },
   ]
   const items = withFinch ? withFinchItems : withoutFinch
+  const m = dark ? 0.85 : 0.65
   return (
     <section id="problem" className="inbox-section">
       <div className="container" style={{ padding: '0 clamp(24px,5vw,80px)' }}>
@@ -292,7 +306,7 @@ function Problem() {
           <div>
             <p className="section-label">The Problem</p>
             <h2 className="inbox-h2 reveal">THE ADVICE IS ALWAYS APPLY MORE</h2>
-            <p className="inbox-sub reveal reveal-d1">But more applications without strategy just means more ghosting. Students spend hours on applications that go nowhere.</p>
+            <p className="inbox-sub reveal reveal-d1" style={{ opacity: m }}>But more applications without strategy just means more ghosting. Students spend hours on applications that go nowhere.</p>
             <a href="#how-it-works" className="btn-main reveal reveal-d2" style={{ display: 'inline-block' }}>See the fix</a>
           </div>
           <div>
@@ -351,13 +365,14 @@ function BigStat() {
   )
 }
 
-function HowItWorks() {
+function HowItWorks({ dark }: { dark: boolean }) {
+  const m = dark ? 0.85 : 0.65
   return (
     <section id="how-it-works" className="steps-section">
       <div className="container">
         <div className="steps-top">
           <h2 className="reveal">HOW<br />IT WORKS</h2>
-          <p className="reveal reveal-d1">Five steps from sign-up to interview scheduled. The whole thing takes less than a minute per application.</p>
+          <p className="reveal reveal-d1" style={{ opacity: m }}>Five steps from sign-up to interview scheduled. The whole thing takes less than a minute per application.</p>
         </div>
         <div className="steps-list">
           {steps.map((s, i) => (
@@ -365,9 +380,9 @@ function HowItWorks() {
               <div className="step-n">{s.n}</div>
               <div>
                 <div className="step-title">{s.title}</div>
-                <div className="step-body">{s.body}</div>
+                <div className="step-body" style={{ opacity: m }}>{s.body}</div>
               </div>
-              <div className="step-detail-col">{s.detail}</div>
+              <div className="step-detail-col" style={{ opacity: dark ? 0.7 : 0.5 }}>{s.detail}</div>
             </div>
           ))}
         </div>
@@ -376,7 +391,8 @@ function HowItWorks() {
   )
 }
 
-function Product() {
+function Product({ dark }: { dark: boolean }) {
+  const m = dark ? 0.85 : 0.55
   const features = [
     { icon: '🔗', title: 'LinkedIn Integration', body: 'Connect once and Finch builds your full candidate profile automatically. No manual data entry, no copy-pasting.' },
     { icon: '⚡', title: 'Instant Resume Tailoring', body: "For every job you apply to, Finch generates a tailored resume that matches the role's exact requirements in seconds." },
@@ -393,7 +409,7 @@ function Product() {
             <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#D43C33', marginBottom: 16 }}>The Product</p>
             <h2 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 'clamp(52px,7vw,88px)', lineHeight: 0.9, color: '#24364C' }}>EVERYTHING YOU NEED<br />TO WIN THE SEARCH.</h2>
           </div>
-          <p className="reveal reveal-d1" style={{ fontFamily: 'Manrope, sans-serif', fontSize: 14, opacity: 0.5, maxWidth: 280, lineHeight: 1.65, fontWeight: 300, textAlign: 'right' }}>One Chrome extension. One profile. Unlimited tailored applications.</p>
+          <p className="reveal reveal-d1" style={{ fontFamily: 'Manrope, sans-serif', fontSize: 14, opacity: dark ? 0.85 : 0.5, maxWidth: 280, lineHeight: 1.65, fontWeight: 300, textAlign: 'right' }}>One Chrome extension. One profile. Unlimited tailored applications.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, border: '1px solid rgba(26,26,26,0.1)', borderRadius: 12, overflow: 'hidden' }}>
           {features.map((f, i) => (
@@ -404,7 +420,7 @@ function Product() {
             >
               <div style={{ fontSize: 28, marginBottom: 16 }}>{f.icon}</div>
               <h3 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: 16, color: '#24364C', marginBottom: 10 }}>{f.title}</h3>
-              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, lineHeight: 1.65, opacity: 0.55, fontWeight: 300 }}>{f.body}</p>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, lineHeight: 1.65, opacity: m, fontWeight: 300 }}>{f.body}</p>
             </div>
           ))}
         </div>
@@ -416,8 +432,9 @@ function Product() {
   )
 }
 
-function Pricing() {
+function Pricing({ dark }: { dark: boolean }) {
   const [annual, setAnnual] = useState(false)
+  const m = dark ? 0.8 : 0.45
   return (
     <section id="pricing" className="pricing-section">
       <div className="container">
@@ -437,10 +454,10 @@ function Pricing() {
           <div className="p-col" style={{ display: 'flex', flexDirection: 'column' }}>
             <div className="p-tier">Free</div>
             <div className="p-price"><sup>$</sup>0<sub>/mo</sub></div>
-            <div className="p-desc">Get started no card required.</div>
+            <div className="p-desc" style={{ opacity: m }}>Get started no card required.</div>
             <div className="p-features" style={{ flex: 1 }}>
               {['5 AI-tailored applications/month', 'Chrome extension access', 'LinkedIn profile import', 'Basic resume templates'].map((f, i) => (
-                <div key={i} className="p-feat"><span className="p-check">✓</span>{f}</div>
+                <div key={i} className="p-feat" style={{ opacity: dark ? 0.9 : 0.7 }}><span className="p-check">✓</span>{f}</div>
               ))}
             </div>
             <a href="#waitlist" className="p-btn outline" style={{ marginTop: 'auto', alignSelf: 'stretch' }}>Get Started Free</a>
@@ -518,15 +535,16 @@ function AboutTeam() {
   )
 }
 
-function FAQ() {
+function FAQ({ dark }: { dark: boolean }) {
   const [open, setOpen] = useState<number | null>(null)
+  const m = dark ? 0.85 : 0.45
   return (
     <section id="faq" className="faq-section">
       <div className="container">
         <div className="faq-grid">
           <div className="reveal">
             <h2 className="faq-h2">GOOD QUESTIONS</h2>
-            <p className="faq-sub">Everything you need to know before you join. Still curious? Email the team directly.</p>
+            <p className="faq-sub" style={{ opacity: m }}>Everything you need to know before you join. Still curious? Email the team directly.</p>
           </div>
           <div>
             {faqs.map((f, i) => (
@@ -537,7 +555,7 @@ function FAQ() {
                 </button>
                 <AnimatePresence>
                   {open === i && (
-                    <motion.p className="faq-ans" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.28 }}>{f.a}</motion.p>
+                    <motion.p className="faq-ans" style={{ opacity: m }} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: dark ? 0.85 : 0.7 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.28 }}>{f.a}</motion.p>
                   )}
                 </AnimatePresence>
               </div>
@@ -560,98 +578,142 @@ function Capture() {
     e.preventDefault()
     if (form.name && form.email) setDone(true)
   }
-  const inputStyle = (name: string) => ({
-    width: '100%', padding: '13px 16px', borderRadius: 8,
-    border: '1.5px solid ' + (focused === name ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.12)'),
-    background: focused === name ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.06)',
-    color: 'white', fontFamily: 'Manrope, sans-serif', fontSize: 14, outline: 'none', transition: 'all 0.2s',
+  const inputStyle = (name: string): React.CSSProperties => ({
+    width: '100%', padding: '11px 16px', borderRadius: 8,
+    border: '1.5px solid ' + (focused === name ? '#E09643' : 'rgba(26,26,26,0.12)'),
+    background: 'white', color: '#1a1a1a',
+    fontFamily: 'Manrope, sans-serif', fontSize: 14,
+    outline: 'none', transition: 'all 0.2s',
+    boxShadow: focused === name ? '0 0 0 3px rgba(224,150,67,0.12)' : 'none',
   })
   return (
-    <section id="waitlist" style={{ padding: 'clamp(80px,12vw,140px) clamp(24px,5vw,80px)', borderTop: '1px solid rgba(26,26,26,0.1)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ background: 'var(--navy)', borderRadius: 20, overflow: 'hidden', display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 520 }}>
-          <div style={{ padding: 'clamp(48px,6vw,72px)', background: 'linear-gradient(135deg, #24364C 0%, #1a2838 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', bottom: -80, left: -80, width: 300, height: 300, background: 'radial-gradient(circle, rgba(224,150,67,0.15), transparent 70%)', pointerEvents: 'none' }} />
-            <div style={{ position: 'relative' }}>
-              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--orange)', marginBottom: 20 }}>Early Access</p>
-              <h2 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 'clamp(44px,5vw,72px)', lineHeight: 0.92, color: 'white', marginBottom: 20 }}>STOP GUESSING.<br />START WINNING.</h2>
-              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, fontWeight: 300, maxWidth: 340 }}>Join students who are applying smarter not harder. Get early access and be the first to know when Finch launches.</p>
-            </div>
-            <div style={{ position: 'relative' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 40 }}>
-                {[
-                  { icon: '🐦', text: '500+ students already on the waitlist' },
-                  { icon: '🔒', text: 'No spam ever. Unsubscribe anytime.' },
-                  { icon: '⚡', text: 'Early access before public launch' },
-                  { icon: '🎓', text: 'Built by Texas A&M students, for students' },
-                ].map((item, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 14 }}>{item.icon}</span>
-                    <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{item.text}</span>
-                  </div>
-                ))}
+    <section id="waitlist" style={{ background: 'var(--navy)', padding: 'clamp(72px,10vw,120px) clamp(24px,5vw,80px)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(48px,6vw,80px)', alignItems: 'center' }}>
+        <div>
+          <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'var(--orange)', marginBottom: 20 }}>Early Access</p>
+          <h2 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 'clamp(40px,5vw,64px)', lineHeight: 0.95, color: 'white', marginBottom: 20 }}>
+            Apply smarter.<br />Land more<br />interviews.
+          </h2>
+          <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, fontWeight: 300, marginBottom: 36, maxWidth: 360 }}>
+            Join students applying smarter not harder. Be the first to know when Finch launches.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {['500+ students already on the waitlist', 'No spam ever. Unsubscribe anytime.', 'Free early access before public launch', 'Built by Texas A&M students, for students'].map((t, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ width: 18, height: 18, borderRadius: '50%', background: 'rgba(224,150,67,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 10, color: 'var(--orange)', fontWeight: 700 }}>✓</span>
+                <span style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{t}</span>
               </div>
-            </div>
+            ))}
           </div>
-          <div style={{ padding: 'clamp(48px,6vw,72px)', background: '#1e2e40', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            {!done ? (
-              <>
-                <h3 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 32, color: 'white', marginBottom: 8, letterSpacing: 0.5 }}>Join the Waitlist</h3>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, color: 'rgba(255,255,255,0.35)', marginBottom: 32, fontWeight: 300 }}>Takes 20 seconds. No credit card required.</p>
-                <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                  <div>
-                    <label style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', display: 'block', marginBottom: 6 }}>Full Name</label>
-                    <input name="name" type="text" value={form.name} onChange={handle} required placeholder="Carlos Luna Pena" onFocus={() => setFocused('name')} onBlur={() => setFocused('')} style={inputStyle('name') as React.CSSProperties} />
-                  </div>
-                  <div>
-                    <label style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', display: 'block', marginBottom: 6 }}>Email Address</label>
-                    <input name="email" type="email" value={form.email} onChange={handle} required placeholder="you@university.edu" onFocus={() => setFocused('email')} onBlur={() => setFocused('')} style={inputStyle('email') as React.CSSProperties} />
-                  </div>
-                  <div>
-                    <label style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', display: 'block', marginBottom: 6 }}>I am looking for</label>
-                    <select name="interest" value={form.interest} onChange={handle} onFocus={() => setFocused('interest')} onBlur={() => setFocused('')} style={{ ...inputStyle('interest') as React.CSSProperties, appearance: 'none', color: form.interest ? 'white' : 'rgba(255,255,255,0.3)' }}>
-                      <option value="" disabled>Select your goal</option>
-                      <option value="internship">Summer internship</option>
-                      <option value="newgrad">New grad role</option>
-                      <option value="both">Both internship and full-time</option>
-                      <option value="exploring">Just exploring</option>
-                    </select>
-                  </div>
-                  <button type="submit" style={{ marginTop: 8, padding: '15px 28px', borderRadius: 8, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #D43C33, #E09643)', color: 'white', fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: 15, letterSpacing: 0.5, transition: 'all 0.25s', width: '100%' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 24px rgba(212,60,51,0.35)' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'none'; (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none' }}
-                  >Get Early Access 🐦</button>
-                  <div style={{ paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'center' }}>
-                    <a href="/contact" style={{ fontFamily: 'Manrope, sans-serif', fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.3)', textDecoration: 'none', transition: 'color 0.2s' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = 'var(--orange)')}
-                      onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
-                    >Have a question? Contact us directly</a>
-                  </div>
-                </form>
-              </>
-            ) : (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 56, marginBottom: 20 }}>🎉</div>
-                <h3 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 48, color: 'white', marginBottom: 12, letterSpacing: 0.5 }}>You are in!</h3>
-                <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>Welcome to the waitlist, {form.name.split(' ')[0]}. We will reach out personally when early access opens.</p>
-                <a href="/contact" style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, fontWeight: 600, color: 'var(--orange)', textDecoration: 'none' }}>Have a question? Contact us</a>
-              </motion.div>
-            )}
-          </div>
+        </div>
+        <div style={{ background: 'white', borderRadius: 20, padding: 'clamp(32px,4vw,48px)', boxShadow: '0 24px 64px rgba(0,0,0,0.25)' }}>
+          {!done ? (
+            <>
+              <h3 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 26, color: 'var(--navy)', marginBottom: 6 }}>Join the Waitlist</h3>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, color: '#aaa', marginBottom: 28, fontWeight: 300 }}>Takes 20 seconds. No credit card required.</p>
+              <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div>
+                  <label style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', color: '#aaa', display: 'block', marginBottom: 6 }}>Full Name</label>
+                  <input name="name" type="text" value={form.name} onChange={handle} required placeholder="Carlos Luna Pena" onFocus={() => setFocused('name')} onBlur={() => setFocused('')} style={inputStyle('name')} />
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', color: '#aaa', display: 'block', marginBottom: 6 }}>Email Address</label>
+                  <input name="email" type="email" value={form.email} onChange={handle} required placeholder="you@university.edu" onFocus={() => setFocused('email')} onBlur={() => setFocused('')} style={inputStyle('email')} />
+                </div>
+                <div>
+                  <label style={{ fontFamily: 'Manrope, sans-serif', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', color: '#aaa', display: 'block', marginBottom: 6 }}>I am looking for</label>
+                  <select name="interest" value={form.interest} onChange={handle} onFocus={() => setFocused('interest')} onBlur={() => setFocused('')} style={{ ...inputStyle('interest'), appearance: 'none', cursor: 'pointer', color: form.interest ? '#1a1a1a' : '#aaa' }}>
+                    <option value="" disabled>Select your goal</option>
+                    <option value="internship">Summer internship</option>
+                    <option value="newgrad">New grad role</option>
+                    <option value="both">Both internship and full-time</option>
+                    <option value="exploring">Just exploring</option>
+                  </select>
+                </div>
+                <button type="submit"
+                  style={{ marginTop: 4, padding: '14px 28px', borderRadius: 50, border: 'none', cursor: 'pointer', background: 'var(--orange)', color: 'white', fontFamily: 'Nunito, sans-serif', fontWeight: 800, fontSize: 15, transition: 'all 0.25s', width: '100%' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#cc7a10'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 24px rgba(224,150,67,0.35)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--orange)'; (e.currentTarget as HTMLButtonElement).style.transform = 'none'; (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none' }}
+                >Get Early Access 🐦</button>
+                <div style={{ borderTop: '1px solid rgba(26,26,26,0.07)', marginTop: 8, paddingTop: 16, textAlign: 'center' }}>
+                  <a href="/contact" style={{ fontFamily: 'Manrope, sans-serif', fontSize: 12, fontWeight: 500, color: '#bbb', textDecoration: 'none', transition: 'color 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--orange)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#bbb')}
+                  >Have a question? Contact us directly</a>
+                </div>
+              </form>
+            </>
+          ) : (
+            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ fontSize: 48, marginBottom: 16 }}>🎉</div>
+              <h3 style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 32, color: 'var(--navy)', marginBottom: 12 }}>You are in!</h3>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 14, color: '#888', lineHeight: 1.7, fontWeight: 300, marginBottom: 24 }}>
+                Welcome, {form.name.split(' ')[0]}. We will reach out personally when early access opens.
+              </p>
+              <p style={{ fontFamily: 'Manrope, sans-serif', fontSize: 13, fontWeight: 600, color: 'var(--navy)', marginBottom: 14, opacity: 0.6 }}>
+                Know someone who should apply smarter?
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText('https://applyfinch.com')
+                    const btn = document.getElementById('copy-btn') as HTMLButtonElement
+                    if (btn) { btn.innerText = 'Link copied!'; setTimeout(() => { btn.innerText = 'Copy link to share' }, 2000) }
+                  }}
+                  id="copy-btn"
+                  style={{ padding: '12px 24px', borderRadius: 50, border: '1.5px solid rgba(26,26,26,0.15)', background: 'white', cursor: 'pointer', fontFamily: 'Manrope, sans-serif', fontSize: 13, fontWeight: 600, color: 'var(--navy)', transition: 'all 0.2s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--orange)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--orange)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(26,26,26,0.15)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--navy)' }}
+                >Copy link to share</button>
+                <a href="https://twitter.com/intent/tweet?text=Just joined the waitlist for Finch — AI that tailors your resume and autofills job applications in under 60 seconds. Check it out: https://applyfinch.com"
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ padding: '12px 24px', borderRadius: 50, background: '#1a1a1a', color: 'white', textDecoration: 'none', fontFamily: 'Manrope, sans-serif', fontSize: 13, fontWeight: 600, transition: 'all 0.2s', display: 'block' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#333')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#1a1a1a')}
+                >Share on X</a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://applyfinch.com"
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ padding: '12px 24px', borderRadius: 50, background: '#0077b5', color: 'white', textDecoration: 'none', fontFamily: 'Manrope, sans-serif', fontSize: 13, fontWeight: 600, transition: 'all 0.2s', display: 'block' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#005e8e')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#0077b5')}
+                >Share on LinkedIn</a>
+              </div>
+              <div style={{ marginTop: 20 }}>
+                <a href="/contact" style={{ fontFamily: 'Manrope, sans-serif', fontSize: 12, fontWeight: 500, color: '#bbb', textDecoration: 'none' }}>Have a question? Contact us</a>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>
   )
 }
 
-function Footer() {
+function Footer({ dark }: { dark: boolean }) {
+  const m = dark ? 0.7 : 0.3
   return (
     <footer>
       <div className="foot-inner">
         <div className="foot-top">
           <div>
             <div className="foot-brand">🐦 FINCH</div>
-            <div className="foot-tagline">Fewer applications. More interviews.</div>
+            <div className="foot-tagline" style={{ opacity: dark ? 0.6 : 0.3 }}>Fewer applications. More interviews.</div>
+            <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
+              <a href="https://linkedin.com/company/applyfinch" target="_blank" rel="noopener noreferrer"
+                style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', transition: 'background 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.07)')}
+              >
+                <img src="/InBug-Black.png" alt="LinkedIn" style={{ width: 20, height: 20, objectFit: 'contain' }} />
+              </a>
+              <a href="https://github.com/applyfinch" target="_blank" rel="noopener noreferrer"
+                style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', transition: 'background 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.07)')}
+              >
+                <img src="/icons8-github-50.png" alt="GitHub" style={{ width: 20, height: 20, objectFit: 'contain', filter: 'brightness(10)' }} />
+              </a>
+            </div>
           </div>
           <div className="foot-links">
             {[['#problem', 'Problem'], ['#how-it-works', 'How It Works'], ['#pricing', 'Pricing'], ['#team', 'Team'], ['#faq', 'FAQ'], ['#waitlist', 'Join Waitlist']].map(([href, label]) => (
@@ -660,8 +722,8 @@ function Footer() {
           </div>
         </div>
         <div className="foot-bottom">
-          <p className="foot-copy">2025 Finch Built at Texas A&M University</p>
-          <p className="foot-copy"><a href="mailto:nicanor14gz@tamu.edu" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>Contact the team</a></p>
+          <p className="foot-copy" style={{ opacity: dark ? 0.5 : 0.18 }}>2025 Finch Built at Texas A&M University</p>
+          <p className="foot-copy" style={{ opacity: dark ? 0.5 : 0.18 }}><a href="mailto:nicanor14gz@tamu.edu" style={{ color: 'inherit', textDecoration: 'none' }}>Contact the team</a></p>
         </div>
       </div>
     </footer>
@@ -678,18 +740,18 @@ export default function Home() {
     <>
       <Navbar dark={dark} setDark={setDark} />
       <main>
-        <Hero />
+        <Hero dark={dark} />
         <Marquee />
-        <Problem />
+        <Problem dark={dark} />
         <BigStat />
-        <HowItWorks />
-        <Product />
-        <Pricing />
+        <HowItWorks dark={dark} />
+        <Product dark={dark} />
+        <Pricing dark={dark} />
         <AboutTeam />
-        <FAQ />
+        <FAQ dark={dark} />
         <Capture />
       </main>
-      <Footer />
+      <Footer dark={dark} />
     </>
   )
 }
