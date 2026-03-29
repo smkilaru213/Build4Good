@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Navbar } from '@/components/finch/Navbar'
+import { Footer } from '@/components/finch/Footer'
+import { useReveal } from '@/components/finch/useReveal'
 
 // ── TYPES ──────────────────────────────────────────────────────────────────
 interface FAQItem { q: string; a: string }
@@ -16,14 +19,6 @@ const faqs: FAQItem[] = [
   { q: 'Is my data safe?', a: 'Yes. Your LinkedIn data and resume are never sold or shared with third parties. You own your data and can delete it any time.' },
 ]
 
-const steps = [
-  { n: '01', title: 'Connect LinkedIn', body: 'Sign up and link your profile. Finch\'s AI builds a full candidate profile — no manual data entry.', detail: 'Takes about 60 seconds' },
-  { n: '02', title: 'Browse normally', body: 'The Chrome extension watches for job applications on Greenhouse, Lever, and Workday as you browse.', detail: 'Works in the background' },
-  { n: '03', title: 'Get a tailored resume', body: 'For each role, Finch generates a resume and cover letter matched to that exact job description.', detail: 'Generated in seconds' },
-  { n: '04', title: 'Watch it autofill', body: 'The extension fills the entire form — including file uploads — and stops at the review page.', detail: 'You stay in control' },
-  { n: '05', title: 'Submit with confidence', body: 'What normally takes 20–30 minutes is done in under 60 seconds — without sacrificing ATS quality.', detail: 'Fewer apps. Better results.' },
-]
-
 const inboxItems = [
   { ico: '🔵', co: 'Google', pos: 'SWE Intern', tag: 'No response', winner: false },
   { ico: '🟠', co: 'Amazon', pos: 'SDE Intern', tag: 'No response', winner: false },
@@ -34,18 +29,6 @@ const inboxItems = [
 ]
 
 const companies = ['Google', 'Meta', 'Amazon', 'Microsoft', 'Apple', 'Nvidia', 'Stripe', 'Airbnb', 'Uber', 'LinkedIn', 'Salesforce', 'Adobe', 'Figma', 'Notion']
-
-// ── REVEAL HOOK ────────────────────────────────────────────────────────────
-function useReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll('.reveal')
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target) } })
-    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' })
-    els.forEach(el => obs.observe(el))
-    return () => obs.disconnect()
-  }, [])
-}
 
 // ── COUNTER ────────────────────────────────────────────────────────────────
 function Counter({ target, suffix = '' }: { target: number; suffix?: string }) {
@@ -262,35 +245,6 @@ function BirdFlock() {
     </>
   )
 }
-// ── NAVBAR ─────────────────────────────────────────────────────────────────
-function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
-  const [scrolled, setScrolled] = useState(false)
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 32)
-    window.addEventListener('scroll', h)
-    return () => window.removeEventListener('scroll', h)
-  }, [])
-  return (
-    <nav className={scrolled ? 'scrolled' : ''}>
-      <div className="nav-inner">
-        <a href="#" className="nav-logo">
-          <div className="nav-logo-mark">🐦</div>
-          <span className="nav-logo-text">Finch</span>
-        </a>
-        <div className="nav-links">
-          {[['#problem', 'Problem'], ['#how-it-works', 'How It Works'], ['#pricing', 'Pricing'], ['#team', 'Team'], ['#faq', 'FAQ']].map(([href, label]) => (
-            <a key={label} href={href} className="nav-link">{label}</a>
-          ))}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button className="dark-toggle" onClick={() => setDark(!dark)}>{dark ? '☀️' : '🌙'}</button>
-          <a href="#waitlist" className="nav-cta">Join Waitlist</a>
-        </div>
-      </div>
-    </nav>
-  )
-}
-
 // ── HERO ───────────────────────────────────────────────────────────────────
 function Hero() {
   const words = ['INTERVIEWS', 'CALLBACKS', 'RESULTS', 'OFFERS']
@@ -351,8 +305,8 @@ function Hero() {
           </motion.p>
 
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}>
-            <a href="#waitlist" className="btn-main">Join the Waitlist →</a>
-            <a href="#how-it-works" className="btn-ghost">See how it works ↓</a>
+            <a href="/#waitlist" className="btn-main">Join the Waitlist →</a>
+            <a href="/how-it-works" className="btn-ghost">See how it works ↓</a>
           </motion.div>
 
           
@@ -419,7 +373,7 @@ function Problem() {
             <p className="inbox-sub reveal reveal-d1">
               But more applications without strategy just means more ghosting. Students spend hours on applications that go nowhere.
             </p>
-            <a href="#how-it-works" className="btn-main reveal reveal-d2" style={{ display: 'inline-block' }}>
+            <a href="/how-it-works" className="btn-main reveal reveal-d2" style={{ display: 'inline-block' }}>
               See the fix →
             </a>
           </div>
@@ -537,124 +491,6 @@ function BigStat() {
         <div className="big-copy reveal">
           <h2>"The average CS student sends 147 applications and gets 3 interviews."</h2>
           <p>That's not a skill problem. That's a strategy problem. Finch fixes the strategy — so you apply less, and hear back more.</p>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// ── HOW IT WORKS ───────────────────────────────────────────────────────────
-function HowItWorks() {
-  return (
-    <section id="how-it-works" className="steps-section">
-      <div className="container">
-        <div className="steps-top">
-          <h2 className="reveal">HOW<br />IT WORKS</h2>
-          <p className="reveal reveal-d1">Five steps from sign-up to interview scheduled. The whole thing takes less than a minute per application.</p>
-        </div>
-        <div className="steps-list">
-          {steps.map((s, i) => (
-            <div key={i} className={`step-row reveal reveal-d${Math.min(i + 1, 4)}`}>
-              <div className="step-n">{s.n}</div>
-              <div>
-                <div className="step-title">{s.title}</div>
-                <div className="step-body">{s.body}</div>
-              </div>
-              <div className="step-detail-col">{s.detail}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// ── PRODUCT SECTION ─────────────────────────────────────────────────────────
-// Add this AFTER the About function and BEFORE the Team function
- 
-function Product() {
-  const features = [
-    {
-      icon: '🔗',
-      title: 'LinkedIn Integration',
-      body: 'Connect once and Finch builds your full candidate profile automatically. No manual data entry, no copy-pasting.',
-    },
-    {
-      icon: '⚡',
-      title: 'Instant Resume Tailoring',
-      body: 'For every job you apply to, Finch generates a tailored resume that matches the role\'s exact requirements — in seconds.',
-    },
-    {
-      icon: '✍️',
-      title: 'Cover Letter Generation',
-      body: 'Personalized cover letters that sound like you, not like AI. Generated from your profile and the job description.',
-    },
-    {
-      icon: '🤖',
-      title: 'Smart Autofill',
-      body: 'The Chrome extension fills every field in Greenhouse, Lever, and Workday automatically — including file uploads.',
-    },
-    {
-      icon: '🎯',
-      title: 'ATS Optimization',
-      body: 'Finch analyzes your resume against ATS filters before you submit, so you actually get seen by a human.',
-    },
-    {
-      icon: '📊',
-      title: 'Application Tracking',
-      body: 'See every application you\'ve sent, its status, and which roles are worth following up on — all in one place.',
-    },
-  ]
- 
-  return (
-    <section id="product" style={{ padding: 'clamp(80px,12vw,140px) clamp(24px,5vw,80px)', borderTop: '1px solid rgba(26,26,26,0.1)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 72, flexWrap: 'wrap', gap: 24 }}>
-          <div className="reveal">
-            <p style={{ fontFamily: 'DM Sans', fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#D43C33', marginBottom: 16 }}>
-              The Product
-            </p>
-            <h2 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(52px,7vw,88px)', lineHeight: 0.9, color: '#24364C' }}>
-              EVERYTHING YOU NEED<br />TO WIN THE SEARCH.
-            </h2>
-          </div>
-          <p className="reveal reveal-d1" style={{ fontFamily: 'DM Sans', fontSize: 14, opacity: 0.5, maxWidth: 280, lineHeight: 1.65, fontWeight: 300, textAlign: 'right' }}>
-            One Chrome extension. One profile. Unlimited tailored applications.
-          </p>
-        </div>
- 
-        {/* Feature grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, border: '1px solid rgba(26,26,26,0.1)', borderRadius: 12, overflow: 'hidden' }}>
-          {features.map((f, i) => (
-            <div
-              key={i}
-              className={`reveal reveal-d${Math.min(i + 1, 4)}`}
-              style={{
-                background: 'white', padding: '36px 32px',
-                borderRight: i % 3 !== 2 ? '1px solid rgba(26,26,26,0.08)' : 'none',
-                borderBottom: i < 3 ? '1px solid rgba(26,26,26,0.08)' : 'none',
-                transition: 'background 0.3s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#f8f7f5')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'white')}
-            >
-              <div style={{ fontSize: 28, marginBottom: 16 }}>{f.icon}</div>
-              <h3 style={{ fontFamily: 'DM Sans', fontSize: 16, fontWeight: 700, color: '#24364C', marginBottom: 10 }}>{f.title}</h3>
-              <p style={{ fontFamily: 'DM Sans', fontSize: 13, lineHeight: 1.65, opacity: 0.55, fontWeight: 300 }}>{f.body}</p>
-            </div>
-          ))}
-        </div>
- 
-        {/* CTA */}
-        <div style={{ marginTop: 48, display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }} className="reveal">
-        <a href="#waitlist" style={{
-  fontFamily: 'DM Sans', fontSize: 14, fontWeight: 600,
-  background: '#D43C33', color: 'white',
-  padding: '14px 32px', borderRadius: 6, textDecoration: 'none',
-  transition: 'all 0.25s', display: 'inline-block',
-}}>Get Early Access →</a>
-
         </div>
       </div>
     </section>
@@ -921,33 +757,6 @@ function Capture() {
 }
 
 
-// ── FOOTER ─────────────────────────────────────────────────────────────────
-function Footer() {
-  return (
-    <footer>
-      <div className="foot-inner">
-        <div className="foot-top">
-          <div>
-            <div className="foot-brand">🐦 FINCH</div>
-            <div className="foot-tagline">Fewer applications. More interviews.</div>
-          </div>
-          <div className="foot-links">
-            {[['#problem', 'Problem'], ['#how-it-works', 'How It Works'], ['#pricing', 'Pricing'], ['#team', 'Team'], ['#faq', 'FAQ'], ['#waitlist', 'Join Waitlist']].map(([href, label]) => (
-              <a key={label} href={href} className="foot-link">{label}</a>
-            ))}
-          </div>
-        </div>
-        <div className="foot-bottom">
-          <p className="foot-copy">© 2025 Finch — Built at Texas A&M University</p>
-          <p className="foot-copy">
-            <a href="mailto:nicanor14gz@tamu.edu" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>Contact the team</a>
-          </p>
-        </div>
-      </div>
-    </footer>
-  )
-}
-
 // ── ROOT ───────────────────────────────────────────────────────────────────
 export default function Home() {
   const [dark, setDark] = useState(false)
@@ -965,8 +774,6 @@ export default function Home() {
         <Marquee />
         <Problem />
         <BigStat />
-        <HowItWorks />
-        <Product />
         <Pricing />
         <AboutTeam />
         <FAQ />
