@@ -696,7 +696,9 @@ function Footer({ dark }: { dark: boolean }) {
       <div className="foot-inner">
         <div className="foot-top">
           <div>
-            <div className="foot-brand">🐦 FINCH</div>
+          <div style={{ overflow: 'hidden', width: 100, height: 40, marginBottom: 8 }}>
+  <img src="/Logo_Icon-Light__1_-removebg-preview - Edited.png" alt="Finch" style={{ height: 40, width: 'auto', display: 'block' }} />
+</div>
             <div className="foot-tagline" style={{ opacity: dark ? 0.6 : 0.3 }}>Fewer applications. More interviews.</div>
             <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
               <a href="https://linkedin.com/company/applyfinch" target="_blank" rel="noopener noreferrer"
