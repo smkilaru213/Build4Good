@@ -1,40 +1,52 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wingspan — A Website for Finch
 
-## Getting Started
+Built for the **AggieX Startup Challenge** for the TACS Build4Good hackathon.
 
-First, run the development server:
+## What is Finch?
+
+Finch is a Chrome extension that autofills job applications with AI-tailored resumes, helping CS and engineering students apply smarter — not harder.
+
+## What We Built
+
+A multi-page marketing website for Finch with:
+
+- **Home** — Animated hero with rotating headline, live autofill mockup simulating the Chrome extension, interactive "With Finch vs. Without Finch" inbox comparison, pricing toggle, FAQ accordion, and waitlist capture form with social sharing
+- **How It Works** — 5-step visual walkthrough with animated step components including a LinkedIn OAuth flow, job scanner, resume editor, autofill demo, and confirmation screen
+- **About** — Team bios, mission/vision statements, and a custom scatter-backdrop with illustrated brand icons
+- **Dark mode** — Full site-wide theme toggle built on CSS custom properties
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React + TypeScript
+- Tailwind CSS
+- Framer Motion
+
+## Team
+
+- **Riya Patel**
+- **Manasa Kilaru**
+- **Kaori Shioyama**
+- **Emily Lou**
+
+## Running Locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+##Live Vercel Link
+https://finch-website.vercel.app/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design Decisions
 
-## Learn More
+We had no mockups or wireframes — every UI decision was ours to make. We studied the Finch brief and three design inspiration sites, then built the site from scratch with a focus on motion, hierarchy, and brand consistency. The animated birds, typewriter effects, and scroll-based reveals were all designed to bring the Finch brand to life without overwhelming the user.
 
-To learn more about Next.js, take a look at the following resources:
+## What's Next
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# Build4Good
->>>>>>> e9ae99bb0c5823feb770790514993726d7e16187
+- Connect waitlist and contact forms to a real backend
+- Improve accessibility and keyboard navigation
+- Optimize animation performance for faster initial load times
