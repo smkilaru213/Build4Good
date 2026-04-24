@@ -1,6 +1,6 @@
 # Wingspan — A Website for Finch
 
-Built for the **AggieX Startup Challenge** for the TACS Build4Good hackathon.
+Built for the **AggieX Startup Challenge** for the TACS Build4Good hackathon (Winning Project).
 
 ## What is Finch?
 
